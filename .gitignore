@@ -38,3 +38,4 @@ coverage/
 
 # PEM keys
 *.pem
+tests

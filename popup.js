@@ -782,6 +782,31 @@ async function deleteSessionAction(sessionName) {
 }
 
 // ------------ Lists (Convert tabs -> lists) -------------
+function showSessionResult(type, message, details = '') {
+    const resultDiv = document.getElementById('sessionResult');
+    const resultMessage = document.getElementById('sessionResultMessage');
+    if (!resultDiv || !resultMessage) return;
+
+    resultDiv.style.display = 'block';
+    resultDiv.className = `result-container ${type}`;
+    resultMessage.textContent = message;
+
+    if (details) {
+        let detailsEl = document.getElementById('sessionResultDetails');
+        if (!detailsEl) {
+            detailsEl = document.createElement('div');
+            detailsEl.id = 'sessionResultDetails';
+            detailsEl.className = 'result-details';
+            resultDiv.appendChild(detailsEl);
+        }
+        detailsEl.textContent = details;
+    }
+
+    setTimeout(() => {
+        resultDiv.style.display = 'none';
+    }, 5000);
+}
+
 // Load and display saved lists
 async function loadLists() {
     const listsList = document.getElementById('listsList');
@@ -907,7 +932,7 @@ document.getElementById('convertListsBtn')?.addEventListener('click', async () =
         const candidates = tabs.filter(t => t.url && !t.url.startsWith('chrome://') && !t.url.startsWith('edge://') && !t.url.startsWith('about:'));
 
         if (!candidates || candidates.length === 0) {
-            showResult('info', 'No tabs found', '');
+            showSessionResult('info', 'No tabs found', '');
             return;
         }
 
@@ -940,7 +965,7 @@ document.getElementById('convertListsBtn')?.addEventListener('click', async () =
             if (result.success && result.groups && result.groups.length > 0) {
                 groups = result.groups.map(g => ({ key: g.key, items: g.items.map(it => ({ id: it.id, url: it.url, title: it.title, faviconUrl: it.faviconUrl, windowId: it.windowId })) }));
             } else {
-                showResult('info', 'No meaningful groups found', result.message || '');
+                showSessionResult('info', 'No meaningful groups found', result.message || '');
                 return;
             }
         } else {
@@ -977,15 +1002,15 @@ document.getElementById('convertListsBtn')?.addEventListener('click', async () =
         const response = await chrome.runtime.sendMessage({ action: 'saveLists', groups: sendGroups, heuristic, closeTabs });
 
         if (response && response.success) {
-            showResult('success', `Saved ${response.createdCount || response.created?.length || 0} list(s)`, 'Lists saved to local storage');
+            showSessionResult('success', `Saved ${response.createdCount || response.created?.length || 0} list(s)`, 'Lists saved to local storage');
             // Refresh UI lists
             setTimeout(() => { loadLists(); }, 400);
         } else {
-            showResult('error', 'Failed to save lists', (response && response.message) || 'Unknown error');
+            showSessionResult('error', 'Failed to save lists', (response && response.message) || 'Unknown error');
         }
 
     } catch (error) {
-        showResult('error', 'Error converting tabs to lists', error.message || String(error));
+        showSessionResult('error', 'Error converting tabs to lists', error.message || String(error));
     } finally {
         btn.disabled = false;
         btn.innerHTML = oldHtml;
