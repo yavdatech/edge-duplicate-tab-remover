@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duplicate Tab Remover</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="popup-wrapper">
+        <div class="container">
+        
+        <div class="tabs-nav">
+            <button class="tab-btn active" data-tab="cleanup">Cleanup</button>
+            <button class="tab-btn" data-tab="sessions">Sessions</button>
+            <div class="tabs-actions">
+                <button id="openPanelBtn" class="btn-secondary" title="Open full panel">Open Panel</button>
+            </div>
+        </div>
+
+        <!-- Cleanup Tab -->
+        <div id="cleanup" class="tab-content active">
+            <div class="cleanup-actions">
+                <input id="tabSearch" type="search" placeholder="Search your tabs..." aria-label="Search tabs">
+                <label for="sensitivitySelect" class="visually-hidden">Detection sensitivity</label>
+                <select id="sensitivitySelect" class="sensitivity-select" title="Detection sensitivity">
+                    <option value="conservative">Conservative</option>
+                    <option value="balanced" selected>Balanced</option>
+                    <option value="aggressive">Aggressive</option>
+                </select>
+                <input id="queryWhitelistInput" class="query-whitelist" type="text" placeholder="Query params to keep (comma-separated)" title="Query params to keep (comma-separated)" />
+
+                <button id="removeBtn" class="btn-primary">
+                    <span class="btn-icon">🧹</span>
+                    <span>Remove Duplicates</span>
+                </button>
+            </div>
+
+            <div id="tabSearchResults" class="tab-search-results">
+                <p class="loading">Search to find open tabs, or leave empty to list all.</p>
+            </div>
+            
+            <div id="result" class="result-container" style="display: none;">
+                <div class="result-message" id="resultMessage"></div>
+                <div class="result-details" id="resultDetails"></div>
+            </div>
+            
+            <!-- Quick tips moved to Sessions / Manage Extension tab -->
+        </div>
+
+        <!-- Sessions Tab -->
+        <div id="sessions" class="tab-content">
+            <div class="session-controls">
+                <div class="input-group">
+                    <input type="text" id="sessionName" placeholder="Enter session name..." maxlength="50">
+                    <button id="saveSessionBtn" class="btn-secondary">
+                        <span class="btn-icon">💾</span>
+                        <span>Save</span>
+                    </button>
+                </div>
+                <p class="help-text">Save your current tabs as a session to restore later</p>
+            </div>
+
+            <!-- Convert to Lists Controls -->
+            <div class="convert-controls">
+                <h3>Convert tabs to lists</h3>
+                <div class="input-group">
+                    <select id="listsHeuristicSelect" class="sensitivity-select" title="Grouping heuristic">
+                        <option value="domain" selected>Group by domain</option>
+                        <option value="window">Group by window</option>
+                        <option value="domain-window">Group by domain + window</option>
+                        <option value="title">Group by title similarity</option>
+                    </select>
+
+                    <label class="checkbox-label" style="display:flex;align-items:center;gap:8px;">
+                        <input type="checkbox" id="closeTabsCheckbox" checked>
+                        <span style="font-weight:700;">Close tabs after saving</span>
+                    </label>
+
+                    <button id="convertListsBtn" class="btn-primary">
+                        <span class="btn-icon">📋</span>
+                        <span>Convert to Lists</span>
+                    </button>
+                </div>
+                <p class="help-text">Convert your open tabs into lightweight lists to free RAM. You'll be asked to confirm before tabs are closed.</p>
+            </div>
+
+            <div id="sessionResult" class="result-container" style="display: none;">
+                <div class="result-message" id="sessionResultMessage"></div>
+            </div>
+
+            <div class="sessions-list">
+                <h3>Saved Sessions</h3>
+                <div id="sessionsList" class="sessions-grid">
+                    <p class="loading">Loading sessions...</p>
+                </div>
+            </div>
+
+            <div class="lists-list">
+                <h3>Saved Lists</h3>
+                <div id="listsList" class="sessions-grid">
+                    <p class="loading">Loading lists...</p>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h2>Session Tips</h2>
+                <ul>
+                    <li>Save a tab set as a session, then restore it later in one click</li>
+                    <li>Use <strong>Convert tabs to lists</strong> to store tabs as lightweight groups and free RAM</li>
+                    <li>Choose the grouping heuristic that best matches how you work</li>
+                    <li>Restore or delete saved sessions and lists from this tab only</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+    <!-- Confirmation Modal for Duplicate Removal -->
+    <div id="confirmationModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Review Duplicate Tabs</h2>
+                <button class="modal-close" aria-label="Close">&times;</button>
+            </div>
+
+            <div class="modal-info">
+                <p id="duplicateCount"></p>
+            </div>
+
+            <div class="modal-scroll">
+                <div class="duplicate-list">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <div class="modal-selector">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="selectAllCheckbox">
+                    <span>Select/Deselect All</span>
+                </label>
+            </div>
+
+            <div class="modal-footer">
+                <button id="confirmRemoveBtn" class="btn-confirm">Remove Selected</button>
+                <button id="cancelRemoveBtn" class="btn-cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

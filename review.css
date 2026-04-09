@@ -1,0 +1,21 @@
+:root{--accent:#667eea;--muted:#777}
+*{box-sizing:border-box}
+body{font-family:Segoe UI,Roboto,system-ui,Helvetica,Arial;margin:0;background:#f4f6fa;color:#223}
+.header{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
+.header h1{margin:0;font-size:18px}
+.summary{opacity:.95;margin:6px 0 0;font-size:13px;color:rgba(255,255,255,.9)}
+.btn-close{background:transparent;border:1px solid rgba(255,255,255,.2);color:#fff;padding:8px 10px;border-radius:8px;cursor:pointer}
+.main{padding:16px;max-width:980px;margin:0 auto}
+.controls{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+.list{display:flex;flex-direction:column;gap:10px}
+.item{display:flex;gap:12px;padding:12px;border-radius:10px;background:#fff;border:1px solid #e8eefc;align-items:flex-start}
+.item .favicon{width:36px;height:36px;border-radius:6px;background:#eee;flex-shrink:0}
+.item .info{flex:1;min-width:0}
+.title{font-weight:700;margin:0 0 6px;font-size:14px;word-break:break-word}
+.url{font-family:monospace;color:var(--muted);font-size:12px;margin:0}
+.checkbox{margin-top:6px}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#764ba2);color:#fff;border:none;padding:10px 14px;border-radius:8px;cursor:pointer}
+.loading{padding:18px;text-align:center;color:var(--muted)}
+.result{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;background:#1b5e20;color:#fff;padding:10px 14px;border-radius:8px}
+
+@media (max-width:640px){.header{padding:12px}.main{padding:12px}}

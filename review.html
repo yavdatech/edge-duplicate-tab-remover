@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Review Duplicate Tabs</title>
+  <link rel="stylesheet" href="review.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-left">
+      <h1>Review Duplicate Tabs</h1>
+      <p id="summary" class="summary">Scanning...</p>
+    </div>
+    <div class="header-right">
+      <button id="closeBtn" class="btn-close">Close</button>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="controls">
+      <label class="checkbox-label"><input type="checkbox" id="selectAll"> Select / Deselect All</label>
+      <button id="removeSelected" class="btn-primary">Remove Selected</button>
+    </section>
+
+    <section id="list" class="list">
+      <div class="loading">Loading duplicates…</div>
+    </section>
+  </main>
+
+  <div id="result" class="result" hidden></div>
+
+  <script src="review.js"></script>
+</body>
+</html>
